@@ -142,10 +142,8 @@ class Game {
         let self = this;
         for (let y = 0; y < this.gridSize; y++) {
             for (let x = 0; x < this.gridSize; x++) {
-                if (this.grid[y][x].value) {
-                    if (rows.indexOf(y) == -1) {
-                        rows.push(y);
-                    }
+                if (this.grid[y][x].value && rows.indexOf(y) == -1) {
+                    rows.push(y);
                 }
             }
         }
@@ -221,10 +219,8 @@ class Game {
         let self = this;
         for (let y = 0; y < this.gridSize; y++) {
             for (let x = 0; x < this.gridSize; x++) {
-                if (this.grid[y][x].value) {
-                    if (cols.indexOf(x) == -1) {
-                        cols.push(x);
-                    }
+                if (this.grid[y][x].value && cols.indexOf(x) == -1) {
+                    cols.push(x);
                 }
             }
         }
