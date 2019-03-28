@@ -11,11 +11,13 @@ class Game {
         this.gridClass = ".game";
         this.scoreContainer = $(".score").find("span").first();
         this.grid = this.emptyGrid;
+        this.rollDegree = 0;
         this.generateCells();
         this.populate();
         this.populate();
         this.drawGame();
-        this.handleListeners();
+        //this.handleListeners();
+        this.handleRollListeners();
         this.moveLockTimout = 150;
         this.gameOver = false;
         this.canMove = true;
@@ -24,7 +26,7 @@ class Game {
 
     /**
      * Sets the current score
-     * @param value
+     * @param value {number|*|val}
      */
     set score(value) {
         let val = this._score + (value*2);
@@ -121,6 +123,64 @@ class Game {
                         self.lockMoves();
                         break;
                 }
+            }
+        });
+    }
+
+    /**
+     * This will set the game to roll instead of just using the arrow keys
+     */
+    handleRollListeners() {
+        let self = this;
+        $("body").on("keydown", function (e) {
+            let key = e.keyCode;
+            if (self.canMove && [37, 39].indexOf(key) !== -1) {
+                switch (key) {
+                    // Right
+                    case 39:
+                        self.rollDegree += 90;
+                        break;
+                    // Left
+                    case 37:
+                        self.rollDegree -= 90;
+                        break;
+                }
+
+
+                $(".game").css({
+                    "transform": "rotate(" + self.rollDegree + "deg)"
+                });
+
+                $("#cell-dynamic-style").text(`
+                    .game .cell span {
+                        transform: rotate(` + (360 - self.rollDegree) + `deg);
+                    }
+                `);
+                setTimeout(function() {
+                    let rollDegree = 0;
+                    if (self.rollDegree < 0) {
+                        rollDegree = (self.rollDegree % 360) + 360;
+                    } else {
+                        rollDegree = self.rollDegree % 360;
+                    }
+
+                    console.log(self.rollDegree, rollDegree);
+
+                    if (!(rollDegree%360)) {
+                        console.log(360);
+                        self.moveCols(true);
+                    } else if (!(rollDegree%270)) {
+                        console.log(270);
+                        self.moveRows(false);
+                    } else if (!(rollDegree%180)) {
+                        console.log(180);
+                        self.moveCols(false);
+                    } else if (!(rollDegree%90)) {
+                        console.log(90);
+                        self.moveRows(true);
+                    }
+                }, 150);
+                self.lockMoves();
             }
         });
     }
