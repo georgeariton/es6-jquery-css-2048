@@ -18,7 +18,7 @@ class Game {
         this.drawGame();
         //this.handleListeners();
         this.handleRollListeners();
-        this.moveLockTimout = 150;
+        this.moveLockTimout = 300;
         this.gameOver = false;
         this.canMove = true;
         this._score = 0;
